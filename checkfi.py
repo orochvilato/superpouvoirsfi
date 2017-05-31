@@ -80,7 +80,6 @@ superpouvoir = json.loads(e.content)
 shack_base = "https://melenshack.fr"
 from fuzzywuzzy import fuzz
 for c in sorted(candidats,key=lambda c:(c['depart'],c['circo'])):
-    print c['depart'],c['circo'],c['nom']
     c['sp'] = []
     for sp in superpouvoir:
         nom = c['nom'].upper()
