@@ -67,9 +67,9 @@ process.start() # the script will block here until the crawling is finished
 #    f.write(json.dumps(candidats))
 
 e = requests.get("https://melenshack.fr/MODELS/requestajax.php?size=1000&sort=hot&startIndex=15&search=&pseudo=&tag=superpouvoir",verify=False)
-superpouv = json.loads(e.content)
+superpouvoir = json.loads(e.content)
 #with open('superpouv.json','w') as f:
-#    f.write(json.dumps(superpouv))
+#    f.write(json.dumps(superpouvoir))
 
 #with open('candidats.json') as f:
 #    candidats = json.loads(f.read())
