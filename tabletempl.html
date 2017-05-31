@@ -42,10 +42,10 @@
         <td>{{ c['circo'] }}</td>
         <td>{{ c['role'] }}</td>
         <td style="width:20%;">{{ c['nom'] }}</td>
-        <td><a href="{{ c['photo'] }}">Photo</a></td>
+        <td><a href="{{ c['photo'] }}" target="_blank">Photo</a></td>
         <td>
         {% for s in c['sp'] %}
-          <a href="{{ s['img'] }}"><img style='width:40%;' src="{{ s['thumb'] }}" /></a>
+          <a href="{{ s['img'] }}" target="_blank"><img style='width:40%;' src="{{ s['thumb'] }}" /></a>
         {% endfor %}
         </td></tr>
         {% endfor %}
