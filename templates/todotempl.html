@@ -1,0 +1,20 @@
+{% extends "basetempl.html" %}
+{% block body %}
+<table class="bordered">
+  <thead>
+    <tr>
+      <th>Superpouvoir</th>
+      <th>Titre</th>
+      <th>Tags</th>
+    </tr>
+  </thead>
+  <tbody>{% for t in todos %}
+    <tr>
+      <td><a href="{{ t['url'] }}" target="_blank"><img style='width:40%;' src="{{ t['thumb'] }}" /></a></td>
+      <td>{{ t['titre'] }}</td>
+      <td>{{ t['tags'] }}</td>
+    </tr>
+      {% endfor %}
+    </tbody>
+ </table>
+{% endblock %}

@@ -1,6 +1,8 @@
 import scrapy
 import requests
 import json
+import jinja2
+import os
 
 from scrapy.crawler import CrawlerProcess
 
@@ -66,6 +68,12 @@ process.start() # the script will block here until the crawling is finished
 #with open('candidats.json','w') as f:
 #    f.write(json.dumps(candidats))
 
+def renderTemplate(tpl_path, **context):
+    path, filename = os.path.split(tpl_path)
+    return jinja2.Environment(
+        loader=jinja2.FileSystemLoader(path or './')
+    ).get_template(filename).render(**context)
+
 superpouvoir = []
 elts = ['t']
 while len(elts)>0:
@@ -82,6 +90,7 @@ while len(elts)>0:
 #    superpouvoir = json.loads(f.read())
 
 shack_base = "https://melenshack.fr"
+done = []
 from fuzzywuzzy import fuzz
 for c in sorted(candidats,key=lambda c:(c['depart'],c['circo'])):
     c['sp'] = []
@@ -96,9 +105,21 @@ for c in sorted(candidats,key=lambda c:(c['depart'],c['circo'])):
         #fzcirco2=fuzz.partial_ratio('%s - %de' % (c['dep'],c['circo']),sp['titre'])
 
         if fztags>90 or fztitre>90:
+            done.append(sp['id'])
             c['sp'].append({'thumb':shack_base+sp['urlThumbnail'],'img':shack_base+sp['urlSource']})
 
 
-from jinja2 import Template
-template =Template(open('tabletempl.html').read().decode('utf8'))
-open('candidatsfi.html','w').write(template.render(candidats=sorted(candidats,key=lambda c:(c['depart'],c['circo']))).encode('utf-8'))
+from jinja2 import Environment, PackageLoader, select_autoescape,FileSystemLoader
+env = Environment(
+    loader=FileSystemLoader('./templates'),
+    autoescape=select_autoescape(['html', 'xml'])
+)
+todos = [ {'titre':s['titre'],
+           'tags':s['tags'],
+           'thumb':shack_base+s['urlThumbnail'],
+           'url':'https://melenshack.fr/index.php?'+ '&'.join([ 'tag=%s' % tag for tag in s['tags'].split(',')])
+           } for s in superpouvoir if not s['id'] in done]
+templ = env.get_template('todotempl.html').render(todos=todos).encode('utf-8')
+
+open('todos.html','w').write(templ)
+open('candidatsfi.html','w').write(env.get_template('tabletempl.html').render(candidats=sorted(candidats,key=lambda c:(c['depart'],c['circo']))).encode('utf-8'))
