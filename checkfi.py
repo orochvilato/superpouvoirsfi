@@ -97,4 +97,4 @@ for c in sorted(candidats,key=lambda c:(c['depart'],c['circo'])):
 
 from jinja2 import Template
 template =Template(open('tabletempl.html').read().decode('utf8'))
-open('candidatsfi.html','w').write(template.render(candidats=sorted(candidats,key=lambda c:(len(c['sp'])>0,c['depart'],c['circo']))).encode('utf-8'))
+open('candidatsfi.html','w').write(template.render(candidats=sorted(candidats,key=lambda c:(c['depart'],c['circo']))).encode('utf-8'))
