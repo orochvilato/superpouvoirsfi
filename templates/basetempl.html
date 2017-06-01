@@ -9,24 +9,31 @@
     <link rel="shortcut icon" type="image/png" href="" sizes="32x32">
 
   <!-- CSS  -->
+  <style>
+    #logo {
+      padding-left:30px;
+    }
+  </style>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
 
-  <nav class="white" role="navigation">
-    <div class="nav-wrapper container">
-    <a id="logo-container" href="#" class="light-blue-text brand-logo">Opération superpouvoir</a>
+  <nav class="blue" role="navigation" style="margin-bottom:60px;">
+    <div class="nav-wrapper">
+    <a href="#" id="logo" class="brand-logo">Opération superpouvoir ({{ spcount }} / {{ sptotal }})</a>
       <ul class="right hide-on-med-and-down">
+        <li><a href="candidatsfi.html">Candidats</a></li>
+        <li><a href="todos.html">A tagger</a></li>
       </ul>
-
-      <ul id="nav-mobile" class="side-nav">
-      </ul>
-      <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
     </div>
   </nav>
 </head>
 <body>
-  {% block body %}
-  {% endblock %}
+  <div class="row">
+    <div class="col s12">
+      {% block body %}
+      {% endblock %}
+    </div>
+  </div>
 </body>
 <footer class="page-footer">
   <!--  Scripts-->

@@ -91,6 +91,7 @@ while len(elts)>0:
 
 shack_base = "https://melenshack.fr"
 done = []
+spcount = 0
 from fuzzywuzzy import fuzz
 for c in sorted(candidats,key=lambda c:(c['depart'],c['circo'])):
     c['sp'] = []
@@ -104,7 +105,8 @@ for c in sorted(candidats,key=lambda c:(c['depart'],c['circo'])):
         #fzcirco1=fuzz.partial_ratio('%s-%d' % (c['dep'],c['circo']),sp['titre'])
         #fzcirco2=fuzz.partial_ratio('%s - %de' % (c['dep'],c['circo']),sp['titre'])
 
-        if fztags>90 or fztitre>90:
+        if fztags>90 or fztitre>90 or '%s-%d-%s' % (c['dep'],c['circo'],'titulaire' if c['role'][0]=='T' else 'suppleant') in sp['tags'].split(','):
+            spcount += 1
             done.append(sp['id'])
             c['sp'].append({'thumb':shack_base+sp['urlThumbnail'],'img':shack_base+sp['urlSource']})
 
@@ -122,4 +124,4 @@ todos = [ {'titre':s['titre'],
 templ = env.get_template('todotempl.html').render(todos=todos).encode('utf-8')
 
 open('todos.html','w').write(templ)
-open('candidatsfi.html','w').write(env.get_template('tabletempl.html').render(candidats=sorted(candidats,key=lambda c:(c['depart'],c['circo']))).encode('utf-8'))
+open('candidatsfi.html','w').write(env.get_template('tabletempl.html').render(spcount=spcount,sptotal=len(candidats),candidats=sorted(candidats,key=lambda c:(c['depart'],c['circo']))).encode('utf-8'))
