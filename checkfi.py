@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import scrapy
 import requests
 import json
@@ -61,12 +62,15 @@ class CandidatSpider(scrapy.Spider):
 process = CrawlerProcess({
     'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)',
 })
-
-
-process.crawl(CandidatSpider)
-process.start() # the script will block here until the crawling is finished
-#with open('candidats.json','w') as f:
-#    f.write(json.dumps(candidats))
+DEBUG = False
+if not DEBUG:
+    process.crawl(CandidatSpider)
+    process.start() # the script will block here until the crawling is finished
+    #with open('candidats.json','w') as f:
+    #    f.write(json.dumps(candidats))
+else:
+    with open('candidats.json') as f:
+        candidats = json.loads(f.read())
 
 def renderTemplate(tpl_path, **context):
     path, filename = os.path.split(tpl_path)
@@ -74,27 +78,37 @@ def renderTemplate(tpl_path, **context):
         loader=jinja2.FileSystemLoader(path or './')
     ).get_template(filename).render(**context)
 
-superpouvoir = []
-elts = ['t']
-while len(elts)>0:
-    e = requests.get("https://melenshack.fr/MODELS/requestajax.php?size=1000&sort=hot&startIndex=%d&search=&pseudo=&tag=superpouvoir" % (1+len(superpouvoir)),verify=False)
-    elts = json.loads(e.content)
-    superpouvoir += elts
-#with open('superpouv.json','w') as f:
-#    f.write(json.dumps(superpouvoir))
 
-#with open('candidats.json') as f:
-#    candidats = json.loads(f.read())
+sp_dict= {}
+def loadSPTag(sp_dict,tag):
+    elts_dict = {'e':1}
+    index = 1
+    while len(elts_dict)>0:
+        e = requests.get("https://melenshack.fr/MODELS/requestajax.php?size=1000&sort=hot&startIndex=%d&search=&pseudo=&tag=%s" % (index,tag),verify=False)
+        elts_dict = dict((elt['id'],elt) for elt in json.loads(e.content))
+
+        index += len(elts_dict)
+        sp_dict.update(elts_dict)
+
+
+loadSPTag(sp_dict,'superpouvoir')
+loadSPTag(sp_dict,'super pouvoir')
+superpouvoir = sp_dict.values()
+
 
 #with open('superpouv.json') as f:
 #    superpouvoir = json.loads(f.read())
 
 shack_base = "https://melenshack.fr"
 done = []
+stats = {}
 spcount = 0
 from fuzzywuzzy import fuzz
 for c in sorted(candidats,key=lambda c:(c['depart'],c['circo'])):
+    if not c['depart_nom'] in stats.keys():
+        stats[c['depart_nom']] = { 'dep':c['depart_nom'],'Titulaire':{'n':0,'total':0},u'Suppléant':{'n':0,'total':0}}
     c['sp'] = []
+    stats[c['depart_nom']][c['role']]['total'] += 1
     for sp in superpouvoir:
         nom = c['nom'].upper()
         tags = ' '.join(sp['tags'].split(',')).upper()
@@ -107,8 +121,11 @@ for c in sorted(candidats,key=lambda c:(c['depart'],c['circo'])):
 
         if fztags>90 or fztitre>90 or '%s-%d-%s' % (c['dep'],c['circo'],'titulaire' if c['role'][0]=='T' else 'suppleant') in sp['tags'].split(','):
             spcount += 1
+            if not c['sp']:
+                stats[c['depart_nom']][c['role']]['n'] += 1
             done.append(sp['id'])
             c['sp'].append({'thumb':shack_base+sp['urlThumbnail'],'img':shack_base+sp['urlSource']})
+
 
 
 from jinja2 import Environment, PackageLoader, select_autoescape,FileSystemLoader
@@ -123,5 +140,8 @@ todos = [ {'titre':s['titre'],
            } for s in superpouvoir if not s['id'] in done]
 templ = env.get_template('todotempl.html').render(todos=todos).encode('utf-8')
 
+stats = sorted([ {'dep':s['dep'], 'pct': 100*float(s['Titulaire']['n'])/s['Titulaire']['total']} for s in stats.values()],key=lambda d:d['pct'],reverse=True)
+statsdep = [ {'dep':s['dep'],'pos':i+1,'pct':'%.1f %%' % s['pct'] } for i,s in enumerate(stats)]
 open('todos.html','w').write(templ)
 open('candidatsfi.html','w').write(env.get_template('tabletempl.html').render(spcount=spcount,sptotal=len(candidats),candidats=sorted(candidats,key=lambda c:(c['depart'],c['circo']))).encode('utf-8'))
+open('stats.html','w').write(env.get_template('statstempl.html').render(stats=statsdep).encode('utf-8'))

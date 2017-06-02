@@ -22,6 +22,7 @@
     <a href="#" id="logo" class="brand-logo">Opération superpouvoir ({{ spcount }} / {{ sptotal }})</a>
       <ul class="right hide-on-med-and-down">
         <li><a href="candidatsfi.html">Candidats</a></li>
+        <li><a href="stats.html">Stats</a></li>
         <li><a href="todos.html">A tagger</a></li>
       </ul>
     </div>
@@ -40,7 +41,8 @@
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
   <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
-
+  {% block footer %}
+  {% endblock %}
 </footer>
 
 </html>
