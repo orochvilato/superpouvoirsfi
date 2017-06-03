@@ -8,6 +8,11 @@ import os
 from scrapy.crawler import CrawlerProcess
 
 candidats = []
+def checksize(url,size):
+    import urllib, os
+    site = urllib.urlopen(url)
+    meta = site.info()
+    return int(meta.getheaders("Content-Length")[0])==size
 
 class CandidatSpider(scrapy.Spider):
     name = "candidats"
@@ -22,9 +27,10 @@ class CandidatSpider(scrapy.Spider):
     def parse_main(self, response):
         for opt in response.xpath("//select[@id='dep']/option"):
             dpt = opt.xpath('@value').extract()[0]
-
-            request = scrapy.Request(url="%s/departement/%s" % (self.base_url,dpt), callback=self.parse_departement)
+            depurl = "%s/departement/%s" % (self.base_url,dpt)
+            request = scrapy.Request(url=depurl, callback=self.parse_departement)
             request.meta['dep'] = opt.xpath('text()').extract()[0]
+            request.meta['depurl'] = depurl
             yield request
 
     def parse_departement(self, response):
@@ -32,6 +38,7 @@ class CandidatSpider(scrapy.Spider):
             circurl = circ.extract()
             request = scrapy.Request(url="%s%s" % (self.base_url,circurl), callback=self.parse_circo)
             request.meta['dep'] = response.meta['dep']
+            request.meta['depurl'] = response.meta['depurl']
             yield request
 
     def parse_circo(self, response):
@@ -45,8 +52,10 @@ class CandidatSpider(scrapy.Spider):
             role = cand.xpath("div[@class='nom']/text()").extract()[1].replace('\n','').strip()
             bio = cand.xpath("div[@class='bio']/p/text()").extract()
             photo = cand.xpath("div[@class='photo']/img/@src").extract()
+            photo = self.base_url+photo[0]
             candidats.append({
              'url':response.url,
+             'depurl':response.meta['depurl'],
              'dep':depart,
              'depart':('000'+depart)[-3:],
              'depart_nom':response.meta['dep'],
@@ -55,7 +64,7 @@ class CandidatSpider(scrapy.Spider):
              'role':role,
              'mail':liens[0] if liens else "",
              'bio':bio[0] if bio else "",
-             'photo':(self.base_url+photo[0]) if photo else ''})
+             'photo':photo })
 
 
 
@@ -66,8 +75,8 @@ DEBUG = False
 if not DEBUG:
     process.crawl(CandidatSpider)
     process.start() # the script will block here until the crawling is finished
-    #with open('candidats.json','w') as f:
-    #    f.write(json.dumps(candidats))
+    with open('candidats.json','w') as f:
+        f.write(json.dumps(candidats))
 else:
     with open('candidats.json') as f:
         candidats = json.loads(f.read())

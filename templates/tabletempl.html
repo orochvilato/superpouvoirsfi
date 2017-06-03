@@ -13,17 +13,15 @@
       <th>Circo</th>
       <th>Role</th>
       <th style="width:13%;">Nom</th>
-      <th>Photo</th>
       <th>Superpouvoir</th>
     </tr>
   </thead>
   <tbody id="candidats">{% for c in candidats %}
     <tr>
-      <td>{{ c['depart_nom'] }}</td>
-      <td>{{ c['circo'] }}</td>
+      <td><a href="{{ c['depurl'] }}" target="_blank">{{ c['depart_nom'] }}</a></td>
+      <td><a href="{{ c['url']}}" target="_blank">{{ c['circo'] }}</a></td>
       <td>{{ c['role'] }}</td>
-      <td>{{ c['nom'] }}</td>
-      <td><a href="{{ c['photo'] }}" target="_blank">Photo</a></td>
+      <td style="width:20%;"><a href="{{ c['photo'] }}" target="_blank">{{ c['nom'] }}</a></td>
       <td>
       {% for s in c['sp'] %}
         <a href="{{ s['img'] }}" target="_blank"><img style='width:30%;' src="{{ s['thumb'] }}" /></a>
