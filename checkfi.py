@@ -91,7 +91,7 @@ def renderTemplate(tpl_path, **context):
 sp_dict= {}
 def loadSPTag(sp_dict,tag):
     elts_dict = {'e':1}
-    index = 1
+    index = 0
     while len(elts_dict)>0:
         e = requests.get("https://melenshack.fr/MODELS/requestajax.php?size=1000&sort=hot&startIndex=%d&search=&pseudo=&tag=%s" % (index,tag),verify=False)
         elts_dict = dict((elt['id'],elt) for elt in json.loads(e.content))
