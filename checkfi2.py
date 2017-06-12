@@ -23,11 +23,11 @@ for i,row in enumerate(reader):
         'nom':row[3].decode('utf8'),
         'parti':row[4],
         'pct1T':row[5],
-        'adv':row[6],
+        'adv':row[6].decode('utf8'),
         'adv_parti':row[7],
         'adv_pct':row[8],
-        'argument':row[9],
-        'argument_source':row[10]})
+        'argument':row[9].decode('utf8'),
+        'argument_source':row[10].decode('utf8')})
 
 def checksize(url,size):
     import urllib, os
