@@ -92,7 +92,7 @@ for c in sorted(candidats,key=lambda c:(c['depart'],c['circo'])):
         #fzcirco1=fuzz.partial_ratio('%s-%d' % (c['dep'],c['circo']),sp['titre'])
         #fzcirco2=fuzz.partial_ratio('%s - %de' % (c['dep'],c['circo']),sp['titre'])
 
-        if fztags>90 or fztitre>90 or '%s-%d-titulaire' % (c['dep'],c['circo']) in sp['tags'].split(','):
+        if fztags>90 or fztitre>90 or '%s-%d-titulaire' % (c['dep'],c['circo']) in sp['tags'].split(',') or '%s-%d' % (c['dep'],c['circo']) in sp['tags'].split(','):
             c['sp'].append({'thumb':shack_base+sp['urlThumbnail'],'img':shack_base+sp['urlSource']})
 
 
