@@ -11,17 +11,17 @@
     <tr>
       <th style="width:12%;">Département</th>
       <th>Circo</th>
-      <th>Role</th>
       <th style="width:13%;">Nom</th>
-      <th>Superpouvoir</th>
+      <th>% 1T</th>
+      <th>Visuels</th>
     </tr>
   </thead>
   <tbody id="candidats">{% for c in candidats %}
     <tr>
-      <td><a href="{{ c['depurl'] }}" target="_blank">{{ c['depart_nom'] }}</a></td>
-      <td><a href="{{ c['url']}}" target="_blank">{{ c['circo'] }}</a></td>
-      <td>{{ c['role'] }}</td>
-      <td style="width:20%;"><a href="{{ c['photo'] }}" target="_blank">{{ c['nom'] }}</a></td>
+      <td>{{ c['dep'] }} - {{ c['depart_nom'] }}</td>
+      <td>{{ c['circo'] }}</td>
+      <td style="width:20%;"><b>{{ c['nom'] }}</b></td>
+      <td>{{ c['pct1T'] }}</td>
       <td>
       {% for s in c['sp'] %}
         <a href="{{ s['img'] }}" target="_blank"><img style='width:30%;' src="{{ s['thumb'] }}" /></a>
@@ -42,7 +42,7 @@ table = document.getElementById("candidats");
 tr = table.getElementsByTagName("tr");
 
 // Loop through all table rows, and hide those who don't match the search query
-var cols = [0,3];
+var cols = [0,2];
 var show;
 for (i = 0; i < tr.length; i++) {
   show = false;
