@@ -27,7 +27,7 @@
         <a href="{{ s['img'] }}" target="_blank"><img style='width:30%;' src="{{ s['thumb'] }}" /></a>
       {% endfor %}
       </td></tr>
-      <tr><td style="font-size:16px; font-style: italic;"><p>{{ c['adv'] }} ({{ c['adv_parti'] }})</p>
+      <tr><td style="font-size:16px; font-style: italic;"><p>vs {{ c['adv'] }} ({{ c['adv_parti'] }})</p>
         {% if c['argument'] %}<p><small>{{ c['argument'] }} (<a href="{{ c['argument_source'] }}" target="_blank">source</a>)</small></p>{% endif %}
       </td>
         <td>{{ c['adv_pct']}}</td>
