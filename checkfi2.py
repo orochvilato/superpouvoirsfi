@@ -55,6 +55,7 @@ def loadSPTag(sp_dict,tag):
         sp_dict.update(elts_dict)
 
 
+loadSPTag(sp_dict,'second tour')
 loadSPTag(sp_dict,'superpouvoir')
 loadSPTag(sp_dict,'super pouvoir')
 superpouvoir = sp_dict.values()
@@ -76,8 +77,8 @@ for vis in os.listdir('candidats'):
         key = tuple(m.groups())
         visuels[key] = visuels.get(key,[]) + [dict(thumb='candidats/thumb_%s' % vis,img='candidats/%s' % vis)]
 
-print visuels
 from fuzzywuzzy import fuzz
+spcount = 0
 for c in sorted(candidats,key=lambda c:(c['depart'],c['circo'])):
     c['sp'] = []
     if (c['dep'],str(c['circo'])) in visuels.keys():
@@ -93,6 +94,8 @@ for c in sorted(candidats,key=lambda c:(c['depart'],c['circo'])):
         #fzcirco2=fuzz.partial_ratio('%s - %de' % (c['dep'],c['circo']),sp['titre'])
 
         if fztags>90 or fztitre>90 or '%s-%d-titulaire' % (c['dep'],c['circo']) in sp['tags'].split(',') or '%s-%d' % (c['dep'],c['circo']) in sp['tags'].split(','):
+            if 'second tour' in sp['tags'].split(','):
+                spcount += 1
             c['sp'].append({'thumb':shack_base+sp['urlThumbnail'],'img':shack_base+sp['urlSource']})
 
 
