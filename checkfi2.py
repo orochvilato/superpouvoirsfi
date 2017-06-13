@@ -115,5 +115,5 @@ env = Environment(
 #stats = sorted([ {'dep':s['dep'], 'pct': 100*float(s['Titulaire']['n'])/s['Titulaire']['total']} for s in stats.values()],key=lambda d:d['pct'],reverse=True)
 #statsdep = [ {'dep':s['dep'],'pos':i+1,'pct':'%.1f %%' % s['pct'] } for i,s in enumerate(stats)]
 #open('todos.html','w').write(templ)
-open('candidatsfi.html','w').write(env.get_template('tabletempl.html').render(spcount=spcount,sptotal=len(candidats),candidats=sorted(candidats,key=lambda c:(c['depart'],c['circo']))).encode('utf-8'))
+open('candidatsfi.html','w').write(env.get_template('tabletempl2.html').render(spcount=spcount,sptotal=len(candidats),candidats=sorted(candidats,key=lambda c:(c['depart'],c['circo']))).encode('utf-8'))
 #open('stats.html','w').write(env.get_template('statstempl.html').render(stats=statsdep).encode('utf-8'))

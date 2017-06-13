@@ -1,0 +1,90 @@
+{% extends "basetempl.html" %}
+{% block body %}
+<style>
+.candidat {
+  font-size:20px;
+  font-weight:550;
+  height:100px;
+  padding-top:20px;
+  padding-bottom:20px;
+
+}
+.argument {
+  padding-top:10px;
+  font-size:90%
+}
+.elt {
+  padding-top:20px;
+}
+.adversaire {
+  font-size:16px;
+  font-weight:300;
+  padding-top:20px;
+  padding-bottom:20px;
+}
+.header {
+  font-weight: 500;
+}
+.circo {
+    border-top-style: solid;
+    border-width:thin;
+    border-bottom-style: solid;
+    padding-top:20px;
+    padding-bottom:20px;
+  }
+</style>
+<div class="row">
+  <div class="input-field col s6">
+    <input id="search" type="text" onkeyup="search()" class="validate">
+    <label for="search">Recherche</label>
+  </div>
+</div>
+<div class="row header">
+  <div class="col m2 s4">Département</div>
+  <div class="col m1 s2">Circo</div>
+  <div class="col m3 s6">Nom</div>
+  <div class="col m6 s12">Visuels</div>
+</div>
+{% for c in candidats %}
+<div class="row circo light-blue lighten-5" search="{{ c['depart_nom']+' '+c['nom']+' '+c['adv']}}">
+  <div class="col m2 s4"><div class="elt">{{ c['dep'] }} - {{ c['depart_nom'] }}</div></div>
+  <div class="col m1 s2"><div class="elt">{{ c['circo'] }}</div></div>
+  <div class="col m3 s6">
+    <div class="row">
+      <div class="col s12"><div class="candidat"><div class="left">{{ c['nom'] }} ({{ c['parti'] }})</div><div class="right">{{ c['pct1T'] }}</div></div></div>
+      <div class="col s12 light-blue lighten-4"><div class="center">opposé à</div></div>
+      <div class="col s12"><div class="adversaire">
+        <div class="left">{{ c['adv'] }} ({{ c['adv_parti'] }})</div><div class="right">{{ c['adv_pct'] }}</div>
+       {% if c['argument'] %}<div class="left argument">{{ c['argument'] }} (<a href="{{ c['argument_source'] }}" target="_blank">source</a>)</div>{% endif %}
+      </div>
+      </div>
+
+
+    </div>
+  </div>
+  <div class="col m6 s12">{% for s in c['sp'] %}
+    <a href="{{ s['img'] }}" target="_blank"><img style='width:30%;' src="{{ s['thumb'] }}" /></a>
+  {% endfor %}</div>
+</div>
+{% endfor %}
+{% endblock %}
+{% block footer %}
+<script>
+function search() {
+// Declare variables
+var input, filter, table, tr, td, i;
+input = document.getElementById("search");
+filter = input.value.toUpperCase();
+circo = document.getElementsByClassName("circo");
+
+// Loop through all table rows, and hide those who don't match the search query
+for (i = 0; i < circo.length; i++) {
+  if (circo[i].getAttribute('search').toUpperCase().indexOf(filter) == -1) {
+    circo[i].style.display = "none";
+  } else {
+    circo[i].style.display = "";
+  }
+}
+}
+</script>
+{% endblock %}
