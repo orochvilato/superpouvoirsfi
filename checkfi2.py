@@ -82,7 +82,7 @@ spcount = 0
 for c in sorted(candidats,key=lambda c:(c['depart'],c['circo'])):
     c['sp'] = []
     if (c['dep'],str(c['circo'])) in visuels.keys():
-        c['sp'] += visuels[(c['dep'],str(c['circo']))]
+        c['photo'] = visuels[(c['dep'],str(c['circo']))][0]
     for sp in superpouvoir:
         nom = c['nom'].upper()
         tags = ' '.join(sp['tags'].split(',')).upper()

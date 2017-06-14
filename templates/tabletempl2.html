@@ -3,7 +3,7 @@
 <style>
 .candidat {
   font-size:20px;
-  font-weight:550;
+  font-weight:600;
   height:100px;
   padding-top:20px;
   padding-bottom:20px;
@@ -25,6 +25,10 @@
 .header {
   font-weight: 500;
 }
+.dep {
+  font-size:16px;
+  font-weight:600;
+}
 .circo {
     border-top-style: solid;
     border-width:thin;
@@ -39,17 +43,14 @@
     <label for="search">Recherche</label>
   </div>
 </div>
-<div class="row header">
-  <div class="col m2 s4">Département</div>
-  <div class="col m1 s2">Circo</div>
-  <div class="col m3 s6">Nom</div>
-  <div class="col m6 s12">Visuels</div>
-</div>
 {% for c in candidats %}
 <div class="row circo light-blue lighten-5" search="{{ c['depart_nom']+' '+c['nom']+' '+c['adv']}}">
-  <div class="col m2 s4"><div class="elt">{{ c['dep'] }} - {{ c['depart_nom'] }}</div></div>
-  <div class="col m1 s2"><div class="elt">{{ c['circo'] }}</div></div>
-  <div class="col m3 s6">
+  <div class="col l3 m5 s5 dep"><div class="left">{{ c['dep'] }} - {{ c['depart_nom'] }}</div><div class="right">{{ c['circo'] }}</div>
+  {% if 'photo' in c.keys() %}
+    <a href="{{ c['photo']['img'] }}" target="_blank"><img style='width:100%;' src="{{ c['photo']['thumb'] }}" /></a>
+  {% endif %}
+  </div>
+  <div class="col l4 m7 s7">
     <div class="row">
       <div class="col s12"><div class="candidat"><div class="left">{{ c['nom'] }} ({{ c['parti'] }})</div><div class="right">{{ c['pct1T'] }}</div></div></div>
       <div class="col s12 light-blue lighten-4"><div class="center">opposé à</div></div>
@@ -62,8 +63,8 @@
 
     </div>
   </div>
-  <div class="col m6 s12">{% for s in c['sp'] %}
-    <a href="{{ s['img'] }}" target="_blank"><img style='width:30%;' src="{{ s['thumb'] }}" /></a>
+  <div class="col l5 m12 s12">{% for s in c['sp'] %}
+    <a href="{{ s['img'] }}" target="_blank"><img style='width:49%;' src="{{ s['thumb'] }}" /></a>
   {% endfor %}</div>
 </div>
 {% endfor %}
