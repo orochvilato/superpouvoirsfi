@@ -44,7 +44,7 @@
   </div>
 </div>
 {% for c in candidats %}
-<div class="row circo light-blue lighten-5" search="{{ c['depart_nom']+' '+c['nom']+' '+c['adv']}}">
+<div class="row circo light-blue lighten-5" search="{{ c['dep']+' '+c['depart_nom']+' '+c['nom']+' '+c['adv']}}">
   <div class="col l4 m5 s5 dep"><div class="left">{{ c['dep'] }} - {{ c['depart_nom'] }}</div><div class="right">{{ c['circo'] }}</div>
   {% if c['sp'] %}
     <a href="{{ c['sp'][0]['img'] }}" target="_blank"><img style='width:100%;' src="{{ c['sp'][0]['thumb'] }}" /></a>
