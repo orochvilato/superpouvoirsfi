@@ -56,8 +56,8 @@ def loadSPTag(sp_dict,tag):
 
 
 loadSPTag(sp_dict,'second tour')
-loadSPTag(sp_dict,'superpouvoir')
-loadSPTag(sp_dict,'super pouvoir')
+#loadSPTag(sp_dict,'superpouvoir')
+#loadSPTag(sp_dict,'super pouvoir')
 superpouvoir = sp_dict.values()
 
 
@@ -71,11 +71,11 @@ stats = {}
 spcount = 0
 visuels = {}
 import re
-for vis in os.listdir('candidats'):
-    m = re.match(r'([0-9]+)_([0-9]+)_',vis)
-    if m:
-        key = tuple(m.groups())
-        visuels[key] = visuels.get(key,[]) + [dict(thumb='candidats/thumb_%s' % vis,img='candidats/%s' % vis)]
+#for vis in os.listdir('candidats'):
+#    m = re.match(r'([0-9]+)_([0-9]+)_',vis)
+#    if m:
+#        key = tuple(m.groups())
+#        visuels[key] = visuels.get(key,[]) + [dict(thumb='candidats/thumb_%s' % vis,img='candidats/%s' % vis)]
 
 from fuzzywuzzy import fuzz
 spcount = 0
@@ -94,7 +94,7 @@ for c in sorted(candidats,key=lambda c:(c['depart'],c['circo'])):
         #fzcirco2=fuzz.partial_ratio('%s - %de' % (c['dep'],c['circo']),sp['titre'])
 
         if fztags>90 or fztitre>90 or '%s-%d-titulaire' % (c['dep'],c['circo']) in sp['tags'].split(',') or '%s-%d' % (c['dep'],c['circo']) in sp['tags'].split(','):
-            if 'second tour' in sp['tags'].split(','):
+            if 'Second tour' in sp['tags'].split(','):
                 spcount += 1
             c['sp'].append({'thumb':shack_base+sp['urlThumbnail'],'img':shack_base+sp['urlSource']})
 
